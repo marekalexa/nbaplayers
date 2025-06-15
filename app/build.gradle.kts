@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.secrets.gradle.plugin)
+    alias(libs.plugins.devtools.ksp)
     kotlin("kapt")
 }
 
