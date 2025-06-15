@@ -9,7 +9,6 @@ import androidx.paging.map
 import com.example.nbaplayers.R
 import com.example.nbaplayers.domain.repository.PlayersRepository
 import com.example.nbaplayers.ui.model.PlayerUiModel
-import com.example.nbaplayers.ui.model.TeamUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,20 +29,10 @@ class PlayersViewModel @Inject constructor(
                 paging.map { player ->
                     PlayerUiModel(
                         id = player.id,
-                        firstName = player.firstName,
-                        lastName = player.lastName,
+                        fullname = "${player.firstName} ${player.lastName}",
                         position = player.position,
                         headshot = randomPlayerHeadshot(),
-                        team = TeamUiModel(
-                            id = player.team.id,
-                            fullName = player.team.fullName,
-                            abbreviation = player.team.abbreviation,
-                            city = player.team.city,
-                            conference = player.team.conference,
-                            division = player.team.division,
-                            name = player.team.name,
-                            logo = randomLogo()
-                        )
+                        teamName = player.team.name,
                     )
                 }
             }
@@ -56,26 +45,8 @@ class PlayersViewModel @Inject constructor(
         )
 }
 
-
 /**
- * Randomly select a logo for demonstration purposes
- */
-private fun randomLogo(): Int {
-    return when ((1..9).random()) {
-        1 -> R.drawable.team1
-        2 -> R.drawable.team2
-        3 -> R.drawable.team3
-        4 -> R.drawable.team4
-        5 -> R.drawable.team5
-        6 -> R.drawable.team6
-        7 -> R.drawable.team7
-        8 -> R.drawable.team8
-        else -> R.drawable.team9
-    }
-}
-
-/**
- * Randomly select a logo for demonstration purposes
+ * Randomly select a headshot picture for demonstration purposes
  */
 private fun randomPlayerHeadshot(): Int {
     return when ((1..4).random()) {

@@ -35,7 +35,6 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.example.nbaplayers.ui.model.PlayerUiModel
 import com.example.nbaplayers.ui.viewmodel.PlayersViewModel
 
-
 private val CardHeight = 180.dp
 private val CardPadding = 8.dp
 
@@ -50,8 +49,6 @@ fun PlayersGridScreen(
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 140.dp),
         modifier = Modifier.fillMaxSize(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(players.itemCount) { index ->
             players[index]?.let { player ->
@@ -112,14 +109,14 @@ fun PlayerCard(
 
             GlideImage(
                 model = player.headshot,
-                contentDescription = "${player.team.fullName} logo",
+                contentDescription = "${player.fullname} picture",
                 modifier = Modifier.size(56.dp)
             )
 
             Spacer(Modifier.height(8.dp))
 
             Text(
-                text = "${player.firstName} ${player.lastName}",
+                text = player.fullname,
                 modifier = Modifier
                     .fillMaxWidth(),
                 textAlign = TextAlign.Center,
@@ -128,7 +125,7 @@ fun PlayerCard(
 
 
             Text(
-                text = player.team.fullName,
+                text = player.teamName,
                 style = MaterialTheme.typography.bodySmall
             )
             Text(

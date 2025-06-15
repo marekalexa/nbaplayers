@@ -4,9 +4,8 @@ import androidx.annotation.DrawableRes
 
 data class PlayerUiModel(
     val id: Int,
-    val firstName: String,
-    val lastName: String,
+    val fullname: String,
     val position: String,
-    val team: TeamUiModel,
+    val teamName: String,
     @DrawableRes val headshot: Int,
 )
