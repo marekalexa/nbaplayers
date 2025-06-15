@@ -28,55 +28,56 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.nbaplayers.ui.model.PlayerUiModel
-import com.example.nbaplayers.ui.model.PlayersScreenState
 import com.example.nbaplayers.ui.viewmodel.PlayersViewModel
 
 
 private val CardHeight = 180.dp
 private val CardPadding = 8.dp
 
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PlayersGridScreen(
     viewModel: PlayersViewModel = hiltViewModel()
 ) {
-    val screenState by viewModel.screenState
-        .collectAsState(initial = PlayersScreenState(isLoading = true, players = emptyList()))
+    val state by viewModel.screenState.collectAsState()
+    val players = state.players.collectAsLazyPagingItems()
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 140.dp),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(4.dp),
+        modifier = Modifier.fillMaxSize(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(
-            screenState.players.size,
-            key = { screenState.players[it].id }
-        ) { index ->
-            PlayerCard(
-                player = screenState.players[index],
-                onClick = { /* todo */ }
-            )
-        }
-
-        if (screenState.isLoading) {
-            item(span = { GridItemSpan(maxCurrentLineSpan) }) {
-                LoaderIndicator()
-            }
-        }
-
-        screenState.error?.let { msg ->
-            item(span = { GridItemSpan(maxCurrentLineSpan) }) {
-                Text(
-                    text = "Error: $msg",
-                    color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.padding(16.dp)
+        items(players.itemCount) { index ->
+            players[index]?.let { player ->
+                PlayerCard(
+                    player = player,
+                    onClick = { /* todo */ }
                 )
             }
+        }
+
+        when (val stateAppend = players.loadState.append) {
+            is LoadState.Loading ->
+                item(span = { GridItemSpan(maxCurrentLineSpan) }) {
+                    LoaderIndicator()
+                }
+
+            is LoadState.Error ->
+                item(span = { GridItemSpan(maxCurrentLineSpan) }) {
+                    Text(
+                        "Error: ${stateAppend.error.localizedMessage}",
+                        color = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
+
+            else -> Unit
         }
     }
 }
