@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt.android)
+    alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.secrets.gradle.plugin)
     kotlin("kapt")
 }
 
@@ -38,6 +40,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -54,10 +57,20 @@ dependencies {
 
     implementation(libs.glide)
     implementation(libs.glide.compose)
+
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.nav.compose)
     implementation(libs.navigation.compose)
+
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.ks.converter)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
+    implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.paging.runtime)
+    implementation(libs.paging.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
