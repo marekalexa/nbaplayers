@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.nbaplayers.domain.repository.PlayersRepository
 import com.example.nbaplayers.ui.model.PlayerDetailUiModel
 import com.example.nbaplayers.ui.model.toDetailUiModel
+import com.example.nbaplayers.ui.navigation.NavArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -19,10 +20,10 @@ class PlayerDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val id: Int = checkNotNull(savedStateHandle["playerId"])
+    private val playerId: Int = checkNotNull(savedStateHandle[NavArgs.PLAYER_ID])
 
     val uiState: StateFlow<PlayerDetailScreenState> =
-        repo.playerFlow(id)
+        repo.playerFlow(playerId)
             .map { PlayerDetailScreenState(it.toDetailUiModel()) }
             .stateIn(
                 scope = viewModelScope,

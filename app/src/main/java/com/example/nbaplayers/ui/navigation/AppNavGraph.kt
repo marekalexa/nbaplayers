@@ -27,8 +27,8 @@ fun AppNavGraph(modifier: Modifier) {
                 )
             }
             composable(
-                route = "player/{playerId}",
-                arguments = listOf(navArgument("playerId") { type = NavType.IntType })
+                route = "player/{${NavArgs.PLAYER_ID}}",
+                arguments = listOf(navArgument(NavArgs.PLAYER_ID) { type = NavType.IntType })
             ) { back ->
                 val id = back.arguments!!.getInt("playerId")
 
