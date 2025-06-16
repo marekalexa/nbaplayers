@@ -12,15 +12,15 @@ fun getPlayerHeadshot(id: Int): Int {
         0 -> R.drawable.player1
         1 -> R.drawable.player2
         2 -> R.drawable.player3
-        3 -> R.drawable.player3
-        4 -> R.drawable.player4
-        5 -> R.drawable.player5
-        else -> R.drawable.player6
+        3 -> R.drawable.player4
+        4 -> R.drawable.player5
+        5 -> R.drawable.player6
+        else -> R.drawable.player7
     }
 }
 
 /**
- * Select a team logofor demonstration purposes
+ * Select a team logo for demonstration purposes
  */
 @DrawableRes
 fun getTeamLogo(id: Int): Int {
