@@ -7,7 +7,7 @@ data class PlayerUiModel(
     val id: Int,
     val fullname: String,
     val position: String,
-    val teamName: String,
+    val teamName: String?,
     @DrawableRes val headshot: Int,
 )
 
@@ -17,6 +17,6 @@ fun Player.toUiModel(): PlayerUiModel {
         fullname = "$firstName $lastName",
         position = position,
         headshot = getPlayerHeadshot(id),
-        teamName = team?.name ?: "N/A",
+        teamName = team?.name,
     )
 }

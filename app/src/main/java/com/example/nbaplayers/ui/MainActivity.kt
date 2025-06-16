@@ -19,8 +19,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NBAPlayersTheme {
-                Scaffold(Modifier.Companion.fillMaxSize()) { padding ->
-                    AppNavGraph(modifier = Modifier.Companion.padding(padding))
+                Scaffold(Modifier.fillMaxSize()) { padding ->
+                    AppNavGraph(modifier = Modifier.padding(padding))
                 }
             }
         }

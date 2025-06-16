@@ -15,6 +15,9 @@ import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+private const val PAGE_SIZE = 35
+private const val PREFETCH_DISTANCE = PAGE_SIZE / 2
+
 class PlayersRepositoryImpl @Inject constructor(
     private val db: AppDb,
     private val api: BalldontlieApi,
@@ -23,11 +26,10 @@ class PlayersRepositoryImpl @Inject constructor(
     @OptIn(ExperimentalPagingApi::class)
     override fun playersFlow(): Flow<PagingData<Player>> = Pager(
         config = PagingConfig(
-            pageSize = 35,
-            initialLoadSize = 35,
-            prefetchDistance = 18,
+            pageSize = PAGE_SIZE,
+            initialLoadSize = PAGE_SIZE,
+            prefetchDistance = PREFETCH_DISTANCE,
             enablePlaceholders = false,
-            maxSize = PagingConfig.MAX_SIZE_UNBOUNDED
         ),
         remoteMediator = PlayersRemoteMediator(api, db),
         pagingSourceFactory = { db.playerDao().getAllPlayers() }
@@ -36,6 +38,21 @@ class PlayersRepositoryImpl @Inject constructor(
             wrapper.player.toDomain(wrapper.team)
         }
     }
+
+    /** Paging flow with just the players that belong to one team */
+    override fun teamPlayersFlow(teamId: Int): Flow<PagingData<Player>> =
+        Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            // no RemoteMediator – all data is already cached locally
+            pagingSourceFactory = { db.playerDao().playersByTeam(teamId) }
+        ).flow.map { paging ->
+            paging.map { playerEntity ->
+                playerEntity.toDomain(team = null) // team is not needed here
+            }
+        }
 
     override fun playerFlow(id: Int): Flow<Player> =
         db.playerDao()

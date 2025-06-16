@@ -29,12 +29,12 @@ data class PlayerEntity(
     val teamId: Int,
 )
 
-fun PlayerEntity.toDomain(team: TeamEntity) = Player(
+fun PlayerEntity.toDomain(team: TeamEntity?) = Player(
     id = id,
     firstName = firstName,
     lastName = lastName,
     position = position,
     height = height,
     weight = weight,
-    team = team.toDomainModel()
+    team = team?.toDomainModel()
 )

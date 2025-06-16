@@ -6,5 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface PlayersRepository {
     fun playersFlow(): Flow<PagingData<Player>>
+    fun teamPlayersFlow(teamId: Int): Flow<PagingData<Player>>
     fun playerFlow(id: Int): Flow<Player>
 }

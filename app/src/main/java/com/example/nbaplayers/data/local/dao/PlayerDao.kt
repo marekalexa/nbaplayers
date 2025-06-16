@@ -20,6 +20,16 @@ interface PlayerDao {
     @Query("SELECT * FROM players WHERE id = :playerId")
     fun getPlayer(playerId: Int): Flow<PlayerWithTeam>
 
+    /** All players that belong to a single team, ordered by player id. */
+    @Query(
+        """
+        SELECT * FROM players
+        WHERE teamId = :teamId
+        ORDER BY id
+        """
+    )
+    fun playersByTeam(teamId: Int): PagingSource<Int, PlayerEntity>
+
     @Upsert
     suspend fun upsertPlayers(players: List<PlayerEntity>)
 

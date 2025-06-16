@@ -9,8 +9,10 @@ import com.example.nbaplayers.data.local.entity.PlayerEntity
 import com.example.nbaplayers.data.local.entity.PlayerRemoteKeyEntity
 import com.example.nbaplayers.data.local.entity.TeamEntity
 
-@Database(entities = [PlayerEntity::class, TeamEntity::class,
-    PlayerRemoteKeyEntity::class], version = 1)
+@Database(
+    entities = [PlayerEntity::class, TeamEntity::class,
+        PlayerRemoteKeyEntity::class], version = 1
+)
 abstract class AppDb : RoomDatabase() {
     abstract fun playerDao(): PlayerDao
     abstract fun teamDao(): TeamDao
