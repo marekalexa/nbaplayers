@@ -1,7 +1,9 @@
 package com.example.nbaplayers.ui.screen
 
+import android.util.Log
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,14 +17,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -30,8 +31,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.example.nbaplayers.ui.component.ErrorBanner
 import com.example.nbaplayers.ui.model.PlayerUiModel
 import com.example.nbaplayers.ui.viewmodel.PlayersViewModel
 
@@ -43,42 +46,79 @@ private val CardPadding = 8.dp
 fun PlayersGridScreen(
     viewModel: PlayersViewModel = hiltViewModel()
 ) {
-    val state by viewModel.screenState.collectAsState()
-    val players = state.players.collectAsLazyPagingItems()
+    val screenState = viewModel.screenState.collectAsState()
+    val players = screenState.value.players.collectAsLazyPagingItems()
+    val gridState = rememberLazyGridState()
 
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(minSize = 140.dp),
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        items(players.itemCount) { index ->
-            players[index]?.let { player ->
-                PlayerCard(
-                    player = player,
-                    onClick = { /* todo */ }
-                )
+    val isRefreshing = players.loadState.refresh is LoadState.Loading
+    val appendState = players.loadState.append
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                state = gridState,
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                items(
+                    count = players.itemCount,
+                    key = players.itemKey { player -> "player_${player.id}" },
+                    contentType = { "playerCard" },
+                ) { index ->
+                    val player = players[index]
+                    Log.d("Paging-LS", "Rendering player at index $index: id = ${player?.id}")
+                    if (player != null) {
+                        PlayerCard(
+                            player = player,
+                            onClick = { /* … */ },
+                        )
+                    } else {
+                        // Consistent placeholder that maintains the same size
+                        PlayerCardPlaceholder()
+                    }
+                }
+
+                // Add loading indicator at the end when loading more items
+                if (appendState is LoadState.Loading) {
+                    item(
+                        key = "loading_indicator",
+                        span = { GridItemSpan(maxLineSpan) }
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
+                }
+
+                // Add error state at the end when loading fails
+                if (appendState is LoadState.Error) {
+                    item(
+                        key = "error_banner",
+                        span = { GridItemSpan(maxLineSpan) }
+                    ) {
+                        ErrorBanner(
+                            message = appendState.error.localizedMessage ?: "Unknown error",
+                            onRetry = players::retry,
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .height(CardHeight),
+                        )
+                    }
+                }
             }
         }
 
-        when (val stateAppend = players.loadState.append) {
-            is LoadState.Loading ->
-                item(span = { GridItemSpan(maxCurrentLineSpan) }) {
-                    LoaderIndicator()
-                }
-
-            is LoadState.Error ->
-                item(span = { GridItemSpan(maxCurrentLineSpan) }) {
-                    Text(
-                        "Error: ${stateAppend.error.localizedMessage}",
-                        color = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.padding(16.dp)
-                    )
-                }
-
-            else -> Unit
+        if (isRefreshing) {
+            LoaderIndicator()
         }
     }
 }
-
 
 @OptIn(
     ExperimentalSharedTransitionApi::class,
@@ -88,25 +128,22 @@ fun PlayersGridScreen(
 fun PlayerCard(
     player: PlayerUiModel,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-
-
     Card(
-        modifier = Modifier
+        modifier = modifier
             .padding(CardPadding)
             .height(CardHeight)
-            .fillMaxWidth()
-            .clickable(onClick = onClick),
-        elevation = CardDefaults.cardElevation()
+            .fillMaxWidth(),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .clickable(onClick = onClick)
                 .padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically)
         ) {
-
             GlideImage(
                 model = player.headshot,
                 contentDescription = "${player.fullname} picture",
@@ -117,17 +154,16 @@ fun PlayerCard(
 
             Text(
                 text = player.fullname,
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleMedium
             )
-
 
             Text(
                 text = player.teamName,
                 style = MaterialTheme.typography.bodySmall
             )
+
             Text(
                 text = player.position,
                 style = MaterialTheme.typography.bodySmall
@@ -136,11 +172,31 @@ fun PlayerCard(
     }
 }
 
-
 @Composable
-private fun LoaderIndicator() {
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        CircularProgressIndicator(Modifier.padding(16.dp))
+private fun PlayerCardPlaceholder(modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier
+            .padding(CardPadding)
+            .height(CardHeight)
+            .fillMaxWidth(),
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(modifier = Modifier.size(24.dp))
+        }
     }
 }
 
+@Composable
+private fun LoaderIndicator() {
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background.copy(alpha = 0.8f)),
+        contentAlignment = Alignment.Center,
+    ) {
+        CircularProgressIndicator(Modifier.padding(16.dp))
+    }
+}

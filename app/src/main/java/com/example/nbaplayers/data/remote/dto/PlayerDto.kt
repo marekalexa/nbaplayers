@@ -1,5 +1,6 @@
 package com.example.nbaplayers.data.remote.dto
 
+import com.example.nbaplayers.data.local.entity.PlayerEntity
 import com.example.nbaplayers.domain.model.Player
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -25,4 +26,15 @@ fun PlayerDto.toDomainModel() = Player(
     heightInches = heightInches,
     weightPounds = weightPounds,
     team = team.toDomainModel()
+)
+
+fun PlayerDto.toLocal() = PlayerEntity(
+    id = id,
+    firstName = firstName,
+    lastName = lastName,
+    position = position,
+    heightFeet = heightFeet,
+    heightInches = heightInches,
+    weightPounds = weightPounds,
+    teamId = team.id
 )
