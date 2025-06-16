@@ -21,16 +21,16 @@ fun AppNavGraph(modifier: Modifier) {
         NavHost(navController, startDestination = "players") {
             composable("players") {
                 PlayersGridScreen(
-                    onPlayerClick = { id -> navController.navigate("player/$id") },
+                    onPlayerClick = { playerId -> navController.navigate("player/$playerId") },
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedVisibilityScope = this
                 )
             }
             composable(
-                route = "player/{id}",
-                arguments = listOf(navArgument("id") { type = NavType.IntType })
+                route = "player/{playerId}",
+                arguments = listOf(navArgument("playerId") { type = NavType.IntType })
             ) { back ->
-                val id = back.arguments!!.getInt("id")
+                val id = back.arguments!!.getInt("playerId")
 
                 PlayerDetailScreen(
                     playerId = id,

@@ -16,6 +16,7 @@ interface PlayerDao {
     @Query("SELECT * FROM players ORDER BY id")
     fun getAllPlayers(): PagingSource<Int, PlayerWithTeam>
 
+    @Transaction
     @Query("SELECT * FROM players WHERE id = :playerId")
     fun getPlayer(playerId: Int): Flow<PlayerWithTeam>
 

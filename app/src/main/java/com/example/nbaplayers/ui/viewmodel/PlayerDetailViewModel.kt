@@ -19,7 +19,7 @@ class PlayerDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val id: Int = checkNotNull(savedStateHandle["id"])
+    private val id: Int = checkNotNull(savedStateHandle["playerId"])
 
     val uiState: StateFlow<PlayerDetailScreenState> =
         repo.playerFlow(id)
