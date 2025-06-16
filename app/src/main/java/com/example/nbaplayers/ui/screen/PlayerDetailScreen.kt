@@ -144,7 +144,7 @@ private fun HeroSection(
                     .size(160.dp)
                     .clip(MaterialTheme.shapes.extraLarge)
                     .sharedElement(imageKey, animatedVisibilityScope),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Fit
             )
             Spacer(Modifier.height(12.dp))
             Text(

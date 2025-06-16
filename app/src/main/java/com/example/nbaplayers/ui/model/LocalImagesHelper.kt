@@ -8,11 +8,14 @@ import com.example.nbaplayers.R
  */
 @DrawableRes
 fun getPlayerHeadshot(id: Int): Int {
-    return when (id % 4) {
+    return when (id % 7) {
         0 -> R.drawable.player1
         1 -> R.drawable.player2
         2 -> R.drawable.player3
-        else -> R.drawable.player4
+        3 -> R.drawable.player3
+        4 -> R.drawable.player4
+        5 -> R.drawable.player5
+        else -> R.drawable.player6
     }
 }
 
