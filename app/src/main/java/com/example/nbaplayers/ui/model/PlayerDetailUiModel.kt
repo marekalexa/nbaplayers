@@ -14,6 +14,7 @@ data class PlayerDetailUiModel(
     val teamCity: String,
     val conference: String,
     @DrawableRes val teamLogo: Int,
+    val teamId: Int?,
 )
 
 fun Player.toDetailUiModel(): PlayerDetailUiModel {
@@ -28,6 +29,7 @@ fun Player.toDetailUiModel(): PlayerDetailUiModel {
         teamCity = team?.city ?: "N/A",
         conference = team?.conference ?: "N/A",
         teamLogo = getTeamLogo(team?.id ?: 0),
+        teamId = team?.id,
     )
 }
 

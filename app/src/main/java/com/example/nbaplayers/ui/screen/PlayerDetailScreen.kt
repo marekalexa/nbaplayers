@@ -3,6 +3,7 @@ package com.example.nbaplayers.ui.screen
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -55,11 +56,11 @@ import com.example.nbaplayers.ui.viewmodel.PlayerDetailViewModel
 )
 @Composable
 fun PlayerDetailScreen(
-    playerId: Int,
     onBack: () -> Unit,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    viewModel: PlayerDetailViewModel = hiltViewModel()
+    viewModel: PlayerDetailViewModel = hiltViewModel(),
+    onTeamClick: (Int) -> Unit,
 ) = with(sharedTransitionScope) {
 
     val uiState by viewModel.uiState.collectAsState()
@@ -89,7 +90,6 @@ fun PlayerDetailScreen(
                 uiState.player?.let { player ->
                     HeroSection(
                         player = player,
-                        playerId = playerId,
                         animatedVisibilityScope = animatedVisibilityScope,
                         sharedTransitionScope = sharedTransitionScope
                     )
@@ -104,7 +104,7 @@ fun PlayerDetailScreen(
 
             item {
                 uiState.player?.let { player ->
-                    TeamCardSection(player = player)
+                    TeamCardSection(player = player, onTeamClick = onTeamClick)
                 }
             }
 
@@ -118,12 +118,11 @@ fun PlayerDetailScreen(
 @Composable
 private fun HeroSection(
     player: PlayerDetailUiModel,
-    playerId: Int,
     animatedVisibilityScope: AnimatedVisibilityScope,
     sharedTransitionScope: SharedTransitionScope
 ) = with(sharedTransitionScope) {
 
-    val imageKey = rememberSharedContentState("image_$playerId")
+    val imageKey = rememberSharedContentState("image_${player.id}")
 
     Card(
         modifier = Modifier
@@ -222,12 +221,13 @@ private fun ProfileGridSection(player: PlayerDetailUiModel) {
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-private fun TeamCardSection(player: PlayerDetailUiModel) {
+private fun TeamCardSection(player: PlayerDetailUiModel, onTeamClick: (Int) -> Unit) {
     Spacer(Modifier.height(16.dp))
     Card(
         modifier = Modifier
             .padding(horizontal = 16.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { player.teamId?.let { onTeamClick(player.teamId) } },
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
         Row(
