@@ -24,9 +24,8 @@ data class PlayerEntity(
     val firstName: String,
     val lastName: String,
     val position: String,
-    val heightFeet: Int?,
-    val heightInches: Int?,
-    val weightPounds: Int?,
+    val height: String?,
+    val weight: String?,
     val teamId: Int,
 )
 
@@ -35,8 +34,7 @@ fun PlayerEntity.toDomain(team: TeamEntity) = Player(
     firstName = firstName,
     lastName = lastName,
     position = position,
-    heightFeet = heightFeet,
-    heightInches = heightInches,
-    weightPounds = weightPounds,
+    height = height,
+    weight = weight,
     team = team.toDomainModel()
 )

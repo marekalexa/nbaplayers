@@ -5,11 +5,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
-import com.example.nbaplayers.R
-import com.example.nbaplayers.domain.model.Player
 import com.example.nbaplayers.domain.repository.PlayersRepository
 import com.example.nbaplayers.ui.model.PlayerUiModel
 import com.example.nbaplayers.ui.model.PlayersScreenState
+import com.example.nbaplayers.ui.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,13 +27,7 @@ class PlayersViewModel @Inject constructor(
         repo.playersFlow()
             .map { paging ->
                 paging.map { player ->
-                    PlayerUiModel(
-                        id = player.id,
-                        fullname = "${player.firstName} ${player.lastName}",
-                        position = player.position,
-                        headshot = getPlayerHeadshot(player.id),
-                        teamName = player.team.name,
-                    )
+                    player.toUiModel()
                 }
             }.cachedIn(viewModelScope)
 
@@ -45,24 +38,3 @@ class PlayersViewModel @Inject constructor(
         )
 }
 
-/**
- * Select a headshot picture for demonstration purposes
- */
-private fun getPlayerHeadshot(id: Int): Int {
-    return when (id % 4) {
-        0 -> R.drawable.player1
-        1 -> R.drawable.player2
-        2 -> R.drawable.player3
-        else -> R.drawable.player4
-    }
-}
-
-private fun Player.toUiModel(): PlayerUiModel {
-    return PlayerUiModel(
-        id = id,
-        fullname = "$firstName $lastName",
-        position = position,
-        headshot = getPlayerHeadshot(id),
-        teamName = team.name,
-    )
-}

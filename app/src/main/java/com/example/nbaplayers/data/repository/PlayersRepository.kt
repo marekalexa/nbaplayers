@@ -36,4 +36,9 @@ class PlayersRepositoryImpl @Inject constructor(
             wrapper.player.toDomain(wrapper.team)
         }
     }
+
+    override fun playerFlow(id: Int): Flow<Player> =
+        db.playerDao()
+            .getPlayer(id)
+            .map { it.player.toDomain(it.team) }
 }

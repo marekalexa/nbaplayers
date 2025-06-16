@@ -9,7 +9,6 @@ import androidx.room.Index
     tableName = "player_remote_keys",
     primaryKeys = ["playerId"],
     foreignKeys = [
-        // keeps the row around only as long as its Player row exists
         ForeignKey(
             entity = PlayerEntity::class,
             parentColumns = ["id"],

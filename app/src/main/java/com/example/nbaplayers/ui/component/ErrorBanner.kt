@@ -24,7 +24,7 @@ fun ErrorBanner(
     modifier = modifier
         .fillMaxWidth()
         .background(MaterialTheme.colorScheme.errorContainer)
-        .clickable { onRetry() }                // simple “tap to retry”
+        .clickable { onRetry() }
         .padding(16.dp),
     horizontalAlignment = Alignment.CenterHorizontally
 ) {

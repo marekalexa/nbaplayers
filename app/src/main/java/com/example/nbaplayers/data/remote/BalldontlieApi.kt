@@ -7,7 +7,7 @@ import retrofit2.http.Query
 interface BalldontlieApi {
     @GET("players")
     suspend fun getPlayers(
-        @Query("cursor") cursor: Int? = null,   // null for the first page
+        @Query("cursor") cursor: Int? = null,
         @Query("per_page") perPage: Int = 35,
     ): PlayersResponseDto
 }

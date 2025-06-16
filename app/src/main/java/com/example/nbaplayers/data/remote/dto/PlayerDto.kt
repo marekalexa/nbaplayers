@@ -11,9 +11,8 @@ data class PlayerDto(
     @SerialName("first_name") val firstName: String,
     @SerialName("last_name") val lastName: String,
     val position: String,
-    @SerialName("height_feet") val heightFeet: Int? = null,
-    @SerialName("height_inches") val heightInches: Int? = null,
-    @SerialName("weight_pounds") val weightPounds: Int? = null,
+    val height: String? = null,
+    val weight: String? = null,
     val team: TeamDto
 )
 
@@ -22,9 +21,8 @@ fun PlayerDto.toDomainModel() = Player(
     firstName = firstName,
     lastName = lastName,
     position = position,
-    heightFeet = heightFeet,
-    heightInches = heightInches,
-    weightPounds = weightPounds,
+    height = height,
+    weight = weight,
     team = team.toDomainModel()
 )
 
@@ -33,8 +31,7 @@ fun PlayerDto.toLocal() = PlayerEntity(
     firstName = firstName,
     lastName = lastName,
     position = position,
-    heightFeet = heightFeet,
-    heightInches = heightInches,
-    weightPounds = weightPounds,
+    height = height,
+    weight = weight,
     teamId = team.id
 )

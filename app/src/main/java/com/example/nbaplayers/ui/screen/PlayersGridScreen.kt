@@ -1,7 +1,8 @@
 package com.example.nbaplayers.ui.screen
 
-import android.util.Log
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,11 +42,14 @@ import com.example.nbaplayers.ui.viewmodel.PlayersViewModel
 private val CardHeight = 180.dp
 private val CardPadding = 8.dp
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun PlayersGridScreen(
-    viewModel: PlayersViewModel = hiltViewModel()
-) {
+    onPlayerClick: (Int) -> Unit,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    viewModel: PlayersViewModel = hiltViewModel(),
+) = with(sharedTransitionScope) {
     val screenState = viewModel.screenState.collectAsState()
     val players = screenState.value.players.collectAsLazyPagingItems()
     val gridState = rememberLazyGridState()
@@ -58,8 +62,6 @@ fun PlayersGridScreen(
                 columns = GridCells.Fixed(2),
                 state = gridState,
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 items(
                     count = players.itemCount,
@@ -67,14 +69,14 @@ fun PlayersGridScreen(
                     contentType = { "playerCard" },
                 ) { index ->
                     val player = players[index]
-                    Log.d("Paging-LS", "Rendering player at index $index: id = ${player?.id}")
                     if (player != null) {
                         PlayerCard(
                             player = player,
-                            onClick = { /* … */ },
+                            onClick = onPlayerClick,
+                            sharedTransitionScope = this@with,
+                            animatedVisibilityScope = animatedVisibilityScope,
                         )
                     } else {
-                        // Consistent placeholder that maintains the same size
                         PlayerCardPlaceholder()
                     }
                 }
@@ -126,10 +128,14 @@ fun PlayersGridScreen(
 )
 @Composable
 fun PlayerCard(
+    modifier: Modifier = Modifier,
     player: PlayerUiModel,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
+    onClick: (Int) -> Unit,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+) = with(sharedTransitionScope) {
+    val imageKey = rememberSharedContentState("image_${player.id}")
+
     Card(
         modifier = modifier
             .padding(CardPadding)
@@ -139,7 +145,7 @@ fun PlayerCard(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .clickable(onClick = onClick)
+                .clickable(onClick = { onClick(player.id) })
                 .padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically)
@@ -147,7 +153,12 @@ fun PlayerCard(
             GlideImage(
                 model = player.headshot,
                 contentDescription = "${player.fullname} picture",
-                modifier = Modifier.size(56.dp)
+                modifier = Modifier
+                    .size(56.dp)
+                    .sharedElement(
+                        sharedContentState = imageKey,
+                        animatedVisibilityScope = animatedVisibilityScope
+                    ),
             )
 
             Spacer(Modifier.height(8.dp))
