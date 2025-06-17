@@ -56,6 +56,7 @@ app/
 ├── domain/
 │   ├── model/          # Domain models
 │   └── repository/     # Repository interfaces
+│   └── usecase/        # Use cases
 └── ui/
     ├── screen/         # Compose screens
     ├── component/      # Reusable Compose components
