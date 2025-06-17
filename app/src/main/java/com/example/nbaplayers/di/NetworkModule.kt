@@ -27,8 +27,10 @@ object NetworkModule {
     @Provides
     @Singleton
     fun loggingInterceptor(): HttpLoggingInterceptor =
-        HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
-
+        HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+            redactHeader("Authorization")
+        }
 
     @Provides
     @Singleton
@@ -39,7 +41,6 @@ object NetworkModule {
         .addInterceptor(auth)
         .addInterceptor(logger)
         .build()
-
 
     private val json = Json {
         ignoreUnknownKeys = true
