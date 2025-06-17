@@ -33,6 +33,9 @@ interface PlayerDao {
     @Upsert
     suspend fun upsertPlayers(players: List<PlayerEntity>)
 
+    @Query("SELECT id FROM players")
+    suspend fun ids(): List<Int>
+
     @Query("DELETE FROM players")
     suspend fun clear()
 }
