@@ -7,7 +7,7 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.example.nbaplayers.domain.usecase.GetPlayersUseCase
 import com.example.nbaplayers.ui.model.PlayerUiModel
-import com.example.nbaplayers.ui.model.PlayersScreenState
+import com.example.nbaplayers.ui.model.screen.PlayersListScreenState
 import com.example.nbaplayers.ui.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +22,7 @@ import javax.inject.Inject
  * Supports optional flow caching for performance.
  */
 @HiltViewModel
-open class PlayersViewModel @Inject constructor(
+open class PlayersListViewModel @Inject constructor(
     getPlayersUseCase: GetPlayersUseCase
 ) : ViewModel() {
     /** Controls whether the paging flow should be cached in the ViewModel scope. */
@@ -43,9 +43,8 @@ open class PlayersViewModel @Inject constructor(
      * Exposes paginated player data mapped into UI models.
      * This is wrapped in a state holder for the screen.
      */
-    val screenState: StateFlow<PlayersScreenState> =
+    val screenState: StateFlow<PlayersListScreenState> =
         MutableStateFlow(
-            PlayersScreenState(players = pagingFlow)
+            PlayersListScreenState(players = pagingFlow)
         )
 }
-

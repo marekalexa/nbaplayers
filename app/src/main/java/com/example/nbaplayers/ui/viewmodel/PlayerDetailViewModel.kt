@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.nbaplayers.domain.repository.PlayersRepository
-import com.example.nbaplayers.ui.model.PlayerDetailUiModel
+import com.example.nbaplayers.ui.model.screen.PlayerDetailScreenState
 import com.example.nbaplayers.ui.model.toDetailUiModel
 import com.example.nbaplayers.ui.navigation.NavArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,10 +37,3 @@ class PlayerDetailViewModel @Inject constructor(
                 initialValue = PlayerDetailScreenState()
             )
 }
-
-/**
- * UI state for [PlayerDetailScreen].
- *
- * @param player Player details to be shown, or null while loading.
- */
-data class PlayerDetailScreenState(val player: PlayerDetailUiModel? = null)

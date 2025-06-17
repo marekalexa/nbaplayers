@@ -3,7 +3,6 @@ package com.example.nbaplayers.ui.viewmodel
 import androidx.paging.PagingData
 import androidx.paging.testing.asSnapshot
 import com.example.nbaplayers.TestData
-import com.example.nbaplayers.domain.repository.PlayersRepository
 import com.example.nbaplayers.domain.usecase.GetPlayersUseCase
 import com.example.nbaplayers.ui.model.getPlayerHeadshot
 import com.example.nbaplayers.ui.model.toUiModel
@@ -39,8 +38,8 @@ class PlayersViewModelTest {
         Dispatchers.resetMain()
     }
 
-    private fun testViewModel(): PlayersViewModel =
-        object : PlayersViewModel(usecase) {
+    private fun testViewModel(): PlayersListViewModel =
+        object : PlayersListViewModel(usecase) {
             override val cachingEnabled = false
         }
 

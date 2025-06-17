@@ -31,7 +31,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.nbaplayers.BuildConfig
 import com.example.nbaplayers.ui.component.PlayersGridList
-import com.example.nbaplayers.ui.viewmodel.PlayersViewModel
+import com.example.nbaplayers.ui.viewmodel.PlayersListViewModel
 
 /**
  * Screen displaying a paginated grid of all NBA players.
@@ -53,7 +53,7 @@ fun PlayersGridScreen(
     onPlayerClick: (Int) -> Unit,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    viewModel: PlayersViewModel = hiltViewModel(),
+    viewModel: PlayersListViewModel = hiltViewModel(),
 ) = with(sharedTransitionScope) {
     val players = viewModel.screenState.collectAsState().value.players.collectAsLazyPagingItems()
     val refreshing = players.loadState.refresh is LoadState.Loading
