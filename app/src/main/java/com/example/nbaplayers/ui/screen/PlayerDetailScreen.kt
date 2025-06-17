@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.rounded.FitnessCenter
 import androidx.compose.material.icons.rounded.Numbers
 import androidx.compose.material.icons.rounded.SportsBasketball
@@ -219,32 +220,41 @@ private fun TeamCardSection(player: PlayerDetailUiModel, onTeamClick: (Int) -> U
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
-            .clickable { player.teamId?.let { onTeamClick(player.teamId) } },
+            .clickable { player.teamId?.let { onTeamClick(it) } },
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
         Row(
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            GlideImage(
-                model = player.teamLogo,
-                contentDescription = "${player.teamName} logo",
-                modifier = Modifier
-                    .size(56.dp)
-                    .clip(MaterialTheme.shapes.medium),
-                contentScale = ContentScale.Fit
-            )
-            Spacer(Modifier.width(16.dp))
-            Column {
-                Text(player.teamName, style = MaterialTheme.typography.bodyLarge)
-                Text(
-                    "${player.teamCity} • ${player.conference}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                GlideImage(
+                    model = player.teamLogo,
+                    contentDescription = "${player.teamName} logo",
+                    modifier = Modifier
+                        .size(56.dp)
+                        .clip(MaterialTheme.shapes.medium),
+                    contentScale = ContentScale.Fit
                 )
+                Spacer(Modifier.width(16.dp))
+                Column {
+                    Text(player.teamName, style = MaterialTheme.typography.bodyLarge)
+                    Text(
+                        "${player.teamCity} • ${player.conference}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
+
+            Icon(
+                imageVector = Icons.Default.ChevronRight,
+                contentDescription = "Go to team",
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
