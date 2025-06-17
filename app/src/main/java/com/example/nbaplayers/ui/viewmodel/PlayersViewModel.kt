@@ -17,9 +17,10 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
-class PlayersViewModel @Inject constructor(
+open class PlayersViewModel @Inject constructor(
     repo: PlayersRepository
 ) : ViewModel() {
+    open val cachingEnabled: Boolean = true
 
     /** Flow<PagingData<PlayerUiModel>> coming from the repo, already mapped
      *  from domain → UI models. */
@@ -29,7 +30,7 @@ class PlayersViewModel @Inject constructor(
                 paging.map { player ->
                     player.toUiModel()
                 }
-            }.cachedIn(viewModelScope)
+            }.let { flow -> if (cachingEnabled) flow.cachedIn(viewModelScope) else flow }
 
     /** Exposed to the UI.  It wraps the *flow*, not a single page. */
     val screenState: StateFlow<PlayersScreenState> =

@@ -14,6 +14,7 @@ glideCompose = "1.0.0-beta01"
 hilt = "2.52"
 hiltNavCompose = "1.2.0"
 navCompose = "2.9.0"
+pagingTesting = "3.3.6"
 retrofit = "2.11.0"
 retrofitKs = "1.0.0"
 serialization = "1.7.3"
@@ -73,6 +74,8 @@ androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-paging-common = { group = "androidx.paging", name = "paging-common", version.ref = "paging" }
 androidx-test-core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "androidxTest" }
 robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+androidx-paging-common-ktx = { group = "androidx.paging", name = "paging-common-ktx", version.ref = "paging" }
+androidx-paging-testing = { module = "androidx.paging:paging-testing", version.ref = "pagingTesting" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
