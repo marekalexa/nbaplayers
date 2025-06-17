@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
-import com.example.nbaplayers.domain.repository.PlayersRepository
+import com.example.nbaplayers.domain.usecase.GetPlayersUseCase
 import com.example.nbaplayers.ui.model.PlayerUiModel
 import com.example.nbaplayers.ui.model.PlayersScreenState
 import com.example.nbaplayers.ui.model.toUiModel
@@ -18,14 +18,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 open class PlayersViewModel @Inject constructor(
-    repo: PlayersRepository
+    getPlayersUseCase: GetPlayersUseCase
 ) : ViewModel() {
     open val cachingEnabled: Boolean = true
 
-    /** Flow<PagingData<PlayerUiModel>> coming from the repo, already mapped
+    /** Flow<PagingData<PlayerUiModel>> coming from the use case, already mapped
      *  from domain → UI models. */
     private val pagingFlow: Flow<PagingData<PlayerUiModel>> =
-        repo.playersFlow()
+        getPlayersUseCase()
             .map { paging ->
                 paging.map { player ->
                     player.toUiModel()

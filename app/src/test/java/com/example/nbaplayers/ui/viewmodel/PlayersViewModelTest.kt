@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import androidx.paging.testing.asSnapshot
 import com.example.nbaplayers.TestData
 import com.example.nbaplayers.domain.repository.PlayersRepository
+import com.example.nbaplayers.domain.usecase.GetPlayersUseCase
 import com.example.nbaplayers.ui.model.getPlayerHeadshot
 import com.example.nbaplayers.ui.model.toUiModel
 import io.mockk.coEvery
@@ -24,13 +25,13 @@ import kotlin.test.assertEquals
 @OptIn(ExperimentalCoroutinesApi::class)
 class PlayersViewModelTest {
 
-    private lateinit var repository: PlayersRepository
+    private lateinit var usecase: GetPlayersUseCase
     private val testDispatcher = StandardTestDispatcher()
 
     @BeforeTest
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        repository = mockk()
+        usecase = mockk()
     }
 
     @AfterTest
@@ -39,13 +40,13 @@ class PlayersViewModelTest {
     }
 
     private fun testViewModel(): PlayersViewModel =
-        object : PlayersViewModel(repository) {
+        object : PlayersViewModel(usecase) {
             override val cachingEnabled = false
         }
 
     @Test
     fun `repository emits empty paging data, screen state contains empty UI data`() = runTest {
-        coEvery { repository.playersFlow() } returns flowOf(PagingData.empty())
+        coEvery { usecase() } returns flowOf(PagingData.empty())
 
         val viewModel = testViewModel()
         val state = viewModel.screenState.value
@@ -58,7 +59,7 @@ class PlayersViewModelTest {
     fun `repository emits player data, screen state contains transformed UI models`() =
         runTest {
             val player = TestData.player1
-            coEvery { repository.playersFlow() } returns flowOf(PagingData.from(listOf(player)))
+            coEvery { usecase() } returns flowOf(PagingData.from(listOf(player)))
 
             val viewModel = testViewModel()
             val uiPlayer = viewModel.screenState.value.players.asSnapshot().first()
@@ -74,7 +75,7 @@ class PlayersViewModelTest {
     fun `repository emits multiple players, screen state contains all transformed UI models`() =
         runTest {
             val players = listOf(TestData.player1, TestData.player2)
-            coEvery { repository.playersFlow() } returns flowOf(PagingData.from(players))
+            coEvery { usecase() } returns flowOf(PagingData.from(players))
 
             val viewModel = testViewModel()
             val actual = viewModel.screenState.value.players.asSnapshot()
@@ -87,7 +88,7 @@ class PlayersViewModelTest {
     fun `repository emits player without team, screen state contains UI model with null team name`() =
         runTest {
             val player = TestData.player3
-            coEvery { repository.playersFlow() } returns flowOf(PagingData.from(listOf(player)))
+            coEvery { usecase() } returns flowOf(PagingData.from(listOf(player)))
 
             val viewModel = testViewModel()
             val result = viewModel.screenState.value.players.asSnapshot()
