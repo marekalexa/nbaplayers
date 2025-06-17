@@ -30,6 +30,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            // Use debug signing config for demo purposes
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
