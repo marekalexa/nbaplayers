@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 /**
@@ -47,5 +48,14 @@ fun ErrorBanner(
         text = "Tap to retry",
         style = MaterialTheme.typography.labelMedium,
         color = MaterialTheme.colorScheme.onErrorContainer
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ErrorBannerPreview() {
+    ErrorBanner(
+        message = "Failed to load players",
+        onRetry = {}
     )
 }

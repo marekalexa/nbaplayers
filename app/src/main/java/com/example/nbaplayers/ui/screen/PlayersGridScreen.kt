@@ -25,12 +25,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.nbaplayers.BuildConfig
+import com.example.nbaplayers.R
 import com.example.nbaplayers.ui.component.PlayersGridList
+import com.example.nbaplayers.ui.model.PlayerUiModel
+import com.example.nbaplayers.ui.theme.NBAPlayersTheme
 import com.example.nbaplayers.ui.viewmodel.PlayersListViewModel
 
 /**
@@ -112,4 +117,55 @@ fun DebugPositionOverlay(gridState: LazyGridState, modifier: Modifier) {
         color = Color.White,
         style = MaterialTheme.typography.labelMedium
     )
+}
+
+@OptIn(
+    ExperimentalSharedTransitionApi::class,
+    ExperimentalMaterial3Api::class,
+    ExperimentalFoundationApi::class
+)
+@Preview(showBackground = true)
+@Composable
+private fun PlayersGridListPreview() {
+    NBAPlayersTheme {
+        val fakePlayers = listOf(
+            PlayerUiModel(1, "LeBron James", "SF", "Lakers", R.drawable.player1),
+            PlayerUiModel(2, "Anthony Davis", "PF", "Lakers", R.drawable.player2),
+            PlayerUiModel(3, "Rookie Player", "SG", "Lakers", R.drawable.player3),
+            PlayerUiModel(4, "Anthony Davis", "PF", "Lakers", R.drawable.player4),
+            PlayerUiModel(5, "Rookie Player", "SG", "Lakers", R.drawable.player5),
+            PlayerUiModel(6, "Anthony Davis", "PF", "Lakers", R.drawable.player6),
+            PlayerUiModel(7, "Rookie Player", "SG", "Lakers", R.drawable.player7),
+            PlayerUiModel(8, "LeBron James", "SF", "Lakers", R.drawable.player1),
+            PlayerUiModel(9, "Anthony Davis", "PF", "Lakers", R.drawable.player2),
+            PlayerUiModel(10, "Rookie Player", "SG", "Lakers", R.drawable.player3),
+            PlayerUiModel(11, "Anthony Davis", "PF", "Lakers", R.drawable.player4),
+            PlayerUiModel(12, "Rookie Player", "SG", "Lakers", R.drawable.player5),
+            PlayerUiModel(13, "Anthony Davis", "PF", "Lakers", R.drawable.player6),
+            PlayerUiModel(14, "Rookie Player", "SG", "Lakers", R.drawable.player7),
+        )
+        val flow = remember { kotlinx.coroutines.flow.flowOf(PagingData.from(fakePlayers)) }
+        val lazyItems = flow.collectAsLazyPagingItems()
+        val gridState = rememberLazyGridState()
+
+        PlayersGridList(
+            modifier = Modifier.fillMaxSize(),
+            players = lazyItems,
+            gridState = gridState,
+            onPlayerClick = { },
+            sharedTransitionScope = null,
+            animatedVisibilityScope = null
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun DebugPositionOverlayPreview() {
+    NBAPlayersTheme {
+        DebugPositionOverlay(
+            gridState = rememberLazyGridState(),
+            modifier = Modifier
+        )
+    }
 }

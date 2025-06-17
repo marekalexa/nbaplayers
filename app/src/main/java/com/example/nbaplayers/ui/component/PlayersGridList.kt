@@ -31,12 +31,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.example.nbaplayers.R
 import com.example.nbaplayers.ui.model.PlayerUiModel
 
 
@@ -242,5 +244,25 @@ private fun PlayerCardPlaceholder(modifier: Modifier = Modifier) {
         ) {
             CircularProgressIndicator(modifier = Modifier.size(24.dp))
         }
+    }
+}
+
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Preview(showBackground = true)
+@Composable
+fun PlayerCardPreview() {
+    Box(modifier = Modifier.size(200.dp)) {
+        PlayerCard(
+            player = PlayerUiModel(
+                id = 23,
+                fullname = "LeBron James",
+                position = "SF",
+                teamName = "Lakers",
+                headshot = R.drawable.player1
+            ),
+            onClick = {},
+            sharedTransitionScope = null,
+            animatedVisibilityScope = null
+        )
     }
 }

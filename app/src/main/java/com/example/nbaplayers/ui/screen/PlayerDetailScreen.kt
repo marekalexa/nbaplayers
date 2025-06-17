@@ -1,7 +1,9 @@
 package com.example.nbaplayers.ui.screen
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -38,12 +40,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.example.nbaplayers.R
 import com.example.nbaplayers.ui.component.BackArrow
 import com.example.nbaplayers.ui.model.PlayerDetailUiModel
+import com.example.nbaplayers.ui.theme.NBAPlayersTheme
 import com.example.nbaplayers.ui.viewmodel.PlayerDetailViewModel
 
 /**
@@ -256,5 +261,82 @@ private fun TeamCardSection(player: PlayerDetailUiModel, onTeamClick: (Int) -> U
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
+    }
+}
+
+
+@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalGlideComposeApi::class)
+@Preview(showBackground = true)
+@Composable
+private fun HeroSectionPreview() {
+    NBAPlayersTheme {
+        SharedTransitionLayout(Modifier.size(500.dp)) {
+            AnimatedVisibility(visible = true) {
+                val sample = PlayerDetailUiModel(
+                    id = 23,
+                    fullname = "LeBron James",
+                    position = "SF",
+                    headshot = R.drawable.player1,
+                    height = "6'9\"",
+                    weight = "250 lbs",
+                    teamName = "Lakers",
+                    teamCity = "Los Angeles",
+                    conference = "West",
+                    teamLogo = R.drawable.team1,
+                    teamId = 1
+                )
+                HeroSection(
+                    player = sample,
+                    animatedVisibilityScope = this,
+                    sharedTransitionScope = this@SharedTransitionLayout
+                )
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ProfileGridSectionPreview() {
+    NBAPlayersTheme {
+        Column(
+            modifier = Modifier.height(300.dp)
+        ) {
+            val sample = PlayerDetailUiModel(
+                id = 23,
+                fullname = "LeBron James",
+                position = "SF",
+                headshot = R.drawable.player1,
+                height = "6'9\"",
+                weight = "250 lbs",
+                teamName = "Lakers",
+                teamCity = "Los Angeles",
+                conference = "West",
+                teamLogo = R.drawable.team1,
+                teamId = 1
+            )
+            ProfileGridSection(player = sample)
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun TeamCardSectionPreview() {
+    NBAPlayersTheme {
+        val sample = PlayerDetailUiModel(
+            id = 23,
+            fullname = "LeBron James",
+            position = "SF",
+            headshot = R.drawable.player1,
+            height = "6'9\"",
+            weight = "250 lbs",
+            teamName = "Lakers",
+            teamCity = "Los Angeles",
+            conference = "West",
+            teamLogo = R.drawable.team1,
+            teamId = 1
+        )
+        TeamCardSection(player = sample, onTeamClick = {})
     }
 }
