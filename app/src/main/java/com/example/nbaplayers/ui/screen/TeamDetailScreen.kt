@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -45,6 +46,7 @@ fun TeamDetailScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val lazyPlayers = uiState.players.collectAsLazyPagingItems()
+    val gridState = rememberLazyGridState()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -58,8 +60,10 @@ fun TeamDetailScreen(
             PlayersGridList(
                 modifier = Modifier
                     .weight(1f)
+                    .padding(8.dp)
                     .fillMaxWidth(),
                 players = lazyPlayers,
+                gridState = gridState,
             )
         }
 
