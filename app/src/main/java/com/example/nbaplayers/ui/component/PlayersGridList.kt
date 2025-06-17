@@ -15,12 +15,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -42,13 +48,27 @@ private val CardPadding = 8.dp
 fun PlayersGridList(
     modifier: Modifier = Modifier,
     players: LazyPagingItems<PlayerUiModel>,
+    gridState: LazyGridState,
     onPlayerClick: ((Int) -> Unit)? = null,
     sharedTransitionScope: SharedTransitionScope? = null,
     animatedVisibilityScope: AnimatedVisibilityScope? = null,
 ) = with(sharedTransitionScope) {
     val appendState = players.loadState.append
+    var didInitialJump by rememberSaveable { mutableStateOf(false) }
+
+    // when the list is refreshed, scroll to the top
+    if (!didInitialJump
+        && players.loadState.refresh is LoadState.NotLoading
+        && players.itemCount > 0
+    ) {
+        LaunchedEffect(players) {
+            gridState.scrollToItem(0)
+            didInitialJump = true
+        }
+    }
 
     LazyVerticalGrid(
+        state = gridState,
         columns = GridCells.Fixed(2),
         modifier = modifier.fillMaxSize()
     ) {
@@ -74,10 +94,11 @@ fun PlayersGridList(
         if (appendState is LoadState.Loading) {
             item(
                 key = "loading_indicator",
-                span = { GridItemSpan(maxLineSpan) }
+                span = { GridItemSpan(maxCurrentLineSpan) }
             ) {
                 Box(
                     modifier = Modifier
+                        .height(CardHeight)
                         .fillMaxWidth()
                         .padding(16.dp),
                     contentAlignment = Alignment.Center

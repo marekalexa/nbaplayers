@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 private const val PAGE_SIZE = 35
-private const val PREFETCH_DISTANCE = PAGE_SIZE / 2
 
 class PlayersRepositoryImpl @Inject constructor(
     private val db: AppDb,
@@ -28,8 +27,8 @@ class PlayersRepositoryImpl @Inject constructor(
         config = PagingConfig(
             pageSize = PAGE_SIZE,
             initialLoadSize = PAGE_SIZE,
-            prefetchDistance = PREFETCH_DISTANCE,
-            enablePlaceholders = false,
+            prefetchDistance = 0,
+            enablePlaceholders = true,
         ),
         remoteMediator = PlayersRemoteMediator(api, db),
         pagingSourceFactory = { db.playerDao().getAllPlayers() }
