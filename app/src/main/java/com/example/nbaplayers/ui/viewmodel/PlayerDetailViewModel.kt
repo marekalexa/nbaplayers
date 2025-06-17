@@ -14,6 +14,12 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
+/**
+ * ViewModel responsible for loading a single NBA player's details.
+ *
+ * Extracts the player ID from [SavedStateHandle] and exposes a [StateFlow]
+ * with a UI-ready model.
+ */
 @HiltViewModel
 class PlayerDetailViewModel @Inject constructor(
     repo: PlayersRepository,
@@ -32,4 +38,9 @@ class PlayerDetailViewModel @Inject constructor(
             )
 }
 
+/**
+ * UI state for [PlayerDetailScreen].
+ *
+ * @param player Player details to be shown, or null while loading.
+ */
 data class PlayerDetailScreenState(val player: PlayerDetailUiModel? = null)

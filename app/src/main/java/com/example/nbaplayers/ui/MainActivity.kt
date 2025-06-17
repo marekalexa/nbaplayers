@@ -12,6 +12,11 @@ import com.example.nbaplayers.ui.navigation.AppNavGraph
 import com.example.nbaplayers.ui.theme.NBAPlayersTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * Main activity hosting the app's composable UI and navigation graph.
+ *
+ * Applies theming and edge-to-edge layout, and sets the root navigation container.
+ */
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

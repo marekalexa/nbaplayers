@@ -9,12 +9,13 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import com.example.nbaplayers.TestData
 import com.example.nbaplayers.data.local.AppDb
 import com.example.nbaplayers.data.local.relation.PlayerWithTeam
 import com.example.nbaplayers.data.remote.BalldontlieApi
+import com.example.nbaplayers.data.remote.dto.PaginationMetadataDto
 import com.example.nbaplayers.data.remote.dto.PlayerDto
 import com.example.nbaplayers.data.remote.dto.PlayersResponseDto
-import com.example.nbaplayers.data.remote.dto.ResponseMetadataDto
 import com.example.nbaplayers.data.remote.dto.TeamDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -44,7 +45,7 @@ class PlayersRemoteMediatorTest {
     private val dispatcher = UnconfinedTestDispatcher()
 
     private fun makePage(startId: Int) =
-        (startId until startId + 35).map { id ->
+        (startId until startId + TestData.pageSize).map { id ->
             val team = TeamDto(
                 id = id,
                 abbreviation = "A$id",
@@ -73,9 +74,18 @@ class PlayersRemoteMediatorTest {
         ).build()
         api = FakeApi(
             mapOf(
-                null to PlayersResponseDto(makePage(0), ResponseMetadataDto(35, 35)),
-                35 to PlayersResponseDto(makePage(35), ResponseMetadataDto(70, 35)),
-                70 to PlayersResponseDto(makePage(70), ResponseMetadataDto(null, 35))
+                null to PlayersResponseDto(
+                    makePage(0),
+                    PaginationMetadataDto(TestData.pageSize, TestData.pageSize)
+                ),
+                TestData.pageSize to PlayersResponseDto(
+                    makePage(TestData.pageSize),
+                    PaginationMetadataDto(TestData.pageSize * 2, TestData.pageSize)
+                ),
+                TestData.pageSize * 2 to PlayersResponseDto(
+                    makePage(TestData.pageSize * 2),
+                    PaginationMetadataDto(null, TestData.pageSize)
+                )
             )
         )
     }

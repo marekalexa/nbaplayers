@@ -14,6 +14,14 @@ import com.example.nbaplayers.ui.screen.PlayerDetailScreen
 import com.example.nbaplayers.ui.screen.PlayersGridScreen
 import com.example.nbaplayers.ui.screen.TeamDetailScreen
 
+/**
+ * Sets up the application's navigation graph.
+ *
+ * This includes shared element transitions between screens and defines
+ * the navigation destinations and their arguments.
+ *
+ * @param modifier The modifier to apply to the navigation container.
+ */
 @OptIn(ExperimentalAnimationApi::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun AppNavGraph(modifier: Modifier) {

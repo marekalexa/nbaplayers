@@ -22,6 +22,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
+/**
+ * ViewModel that provides a team's detail and its associated players.
+ *
+ * Loads both team and paginated player data using the provided repositories.
+ */
 @HiltViewModel
 class TeamDetailViewModel @Inject constructor(
     teamsRepo: TeamsRepository,
@@ -42,6 +47,9 @@ class TeamDetailViewModel @Inject constructor(
             paging.map { it.toUiModel() }
         }
 
+    /**
+     * State representing both the team metadata and its players.
+     */
     val uiState: StateFlow<TeamDetailScreenState> =
         combine(teamUiFlow, playersUiFlow) { team, _ ->
             TeamDetailScreenState(team, playersUiFlow)
@@ -53,6 +61,10 @@ class TeamDetailViewModel @Inject constructor(
             )
 }
 
+
+/**
+ * UI state for [TeamDetailScreen], including team info and a paginated list of players.
+ */
 data class TeamDetailScreenState(
     val team: TeamDetailUiModel? = null,
     val players: Flow<PagingData<PlayerUiModel>> = flowOf(PagingData.empty())

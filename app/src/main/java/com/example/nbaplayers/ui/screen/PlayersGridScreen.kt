@@ -1,6 +1,5 @@
 package com.example.nbaplayers.ui.screen
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -34,6 +33,16 @@ import com.example.nbaplayers.BuildConfig
 import com.example.nbaplayers.ui.component.PlayersGridList
 import com.example.nbaplayers.ui.viewmodel.PlayersViewModel
 
+/**
+ * Screen displaying a paginated grid of all NBA players.
+ *
+ * Supports pull-to-refresh and shared transitions to the detail screen.
+ *
+ * @param onPlayerClick Callback when a player card is clicked.
+ * @param sharedTransitionScope Scope for shared transitions.
+ * @param animatedVisibilityScope Scope for animated visibility.
+ * @param viewModel ViewModel providing the player paging data.
+ */
 @OptIn(
     ExperimentalFoundationApi::class,
     ExperimentalSharedTransitionApi::class,
@@ -76,6 +85,14 @@ fun PlayersGridScreen(
     }
 }
 
+/**
+ * Debug overlay for displaying scroll position and item count.
+ *
+ * Visible only in debug builds.
+ *
+ * @param gridState The grid's scroll state.
+ * @param modifier Modifier for positioning/styling the overlay.
+ */
 @Composable
 fun DebugPositionOverlay(gridState: LazyGridState, modifier: Modifier) {
     // recomposes only when *either* value changes
@@ -86,10 +103,6 @@ fun DebugPositionOverlay(gridState: LazyGridState, modifier: Modifier) {
         }
     }
 
-    Log.e(
-        "GridState",
-        "First visible item index: ${gridState.firstVisibleItemIndex}, Total items: ${gridState.layoutInfo.totalItemsCount}"
-    )
     Text(
         text = info,
         modifier = modifier

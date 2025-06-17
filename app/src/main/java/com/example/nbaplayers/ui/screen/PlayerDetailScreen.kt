@@ -45,7 +45,17 @@ import com.example.nbaplayers.ui.component.BackArrow
 import com.example.nbaplayers.ui.model.PlayerDetailUiModel
 import com.example.nbaplayers.ui.viewmodel.PlayerDetailViewModel
 
-
+/**
+ * Screen displaying the details of a selected NBA player.
+ *
+ * Includes shared element transitions, profile stats, and team info.
+ *
+ * @param onBack Called when the user taps the back button.
+ * @param sharedTransitionScope Provides the scope for shared element transitions.
+ * @param animatedVisibilityScope Used to animate visibility transitions.
+ * @param viewModel Injected view model that provides player data.
+ * @param onTeamClick Called when the user taps the team card.
+ */
 @OptIn(
     ExperimentalMaterial3Api::class,
     ExperimentalSharedTransitionApi::class,
@@ -87,7 +97,9 @@ fun PlayerDetailScreen(
     }
 }
 
-
+/**
+ * Displays the player's avatar, name, and team in a styled card.
+ */
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalGlideComposeApi::class)
 @Composable
 private fun HeroSection(
@@ -135,6 +147,9 @@ private fun HeroSection(
     }
 }
 
+/**
+ * Displays a responsive grid of player statistics (position, height, etc.).
+ */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun ProfileGridSection(player: PlayerDetailUiModel) {
@@ -193,6 +208,9 @@ private fun ProfileGridSection(player: PlayerDetailUiModel) {
     }
 }
 
+/**
+ * Displays the player's team in a card format, clickable to navigate to team details.
+ */
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 private fun TeamCardSection(player: PlayerDetailUiModel, onTeamClick: (Int) -> Unit) {

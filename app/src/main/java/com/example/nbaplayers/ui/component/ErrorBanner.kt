@@ -15,6 +15,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
+/**
+ * A banner shown when an error occurs, typically used for paging errors.
+ * Clicking the banner retries the failed operation.
+ *
+ * @param message The error message to display.
+ * @param onRetry Callback invoked when the user taps the banner.
+ * @param modifier Modifier to be applied to the banner layout.
+ */
 @Composable
 fun ErrorBanner(
     message: String,

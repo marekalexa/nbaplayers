@@ -1,14 +1,17 @@
 package com.example.nbaplayers
 
+import androidx.compose.foundation.pager.PageSize
 import com.example.nbaplayers.data.local.entity.toDomain
 import com.example.nbaplayers.data.local.entity.toDomainModel
 import com.example.nbaplayers.data.remote.dto.PlayerDto
 import com.example.nbaplayers.data.remote.dto.PlayersResponseDto
-import com.example.nbaplayers.data.remote.dto.ResponseMetadataDto
+import com.example.nbaplayers.data.remote.dto.PaginationMetadataDto
 import com.example.nbaplayers.data.remote.dto.TeamDto
 import com.example.nbaplayers.data.remote.dto.toLocal
 
 object TestData {
+    val pageSize = 35
+
     val teamDto1 = TeamDto(
         id = 1,
         name = "Lakers",
@@ -79,7 +82,7 @@ object TestData {
         data = listOf(
             playerDto1
         ),
-        meta = ResponseMetadataDto(nextCursor = null, perPage = 35)
+        meta = PaginationMetadataDto(nextCursor = null, perPage = pageSize)
     )
 
 }

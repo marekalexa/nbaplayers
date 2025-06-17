@@ -16,14 +16,20 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
+/**
+ * ViewModel providing paginated player data to the [PlayersGridScreen].
+ *
+ * Supports optional flow caching for performance.
+ */
 @HiltViewModel
 open class PlayersViewModel @Inject constructor(
     getPlayersUseCase: GetPlayersUseCase
 ) : ViewModel() {
+    /** Controls whether the paging flow should be cached in the ViewModel scope. */
     open val cachingEnabled: Boolean = true
 
     /** Flow<PagingData<PlayerUiModel>> coming from the use case, already mapped
-     *  from domain → UI models. */
+     *  from domain -> UI models. */
     private val pagingFlow: Flow<PagingData<PlayerUiModel>> =
         getPlayersUseCase()
             .map { paging ->
@@ -32,7 +38,11 @@ open class PlayersViewModel @Inject constructor(
                 }
             }.let { flow -> if (cachingEnabled) flow.cachedIn(viewModelScope) else flow }
 
-    /** Exposed to the UI.  It wraps the *flow*, not a single page. */
+
+    /**
+     * Exposes paginated player data mapped into UI models.
+     * This is wrapped in a state holder for the screen.
+     */
     val screenState: StateFlow<PlayersScreenState> =
         MutableStateFlow(
             PlayersScreenState(players = pagingFlow)

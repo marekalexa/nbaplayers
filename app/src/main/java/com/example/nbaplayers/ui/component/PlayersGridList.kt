@@ -43,7 +43,18 @@ import com.example.nbaplayers.ui.model.PlayerUiModel
 private val CardHeight = 180.dp
 private val CardPadding = 8.dp
 
-@ExperimentalSharedTransitionApi
+/**
+ * A responsive grid list of player cards with support for pagination,
+ * loading indicators, and shared element transitions.
+ *
+ * @param modifier Modifier to be applied to the list.
+ * @param players The paged data to display.
+ * @param gridState The scroll state of the grid.
+ * @param onPlayerClick Optional callback when a player is selected.
+ * @param sharedTransitionScope Optional scope for shared element transitions.
+ * @param animatedVisibilityScope Optional scope for animated visibility transitions.
+ */
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun PlayersGridList(
     modifier: Modifier = Modifier,
@@ -126,12 +137,21 @@ fun PlayersGridList(
     }
 }
 
+/**
+ * Displays an individual player card with optional shared element transition.
+ *
+ * @param modifier Modifier to be applied to the card.
+ * @param player The player data to display.
+ * @param onClick Optional callback when the card is tapped.
+ * @param sharedTransitionScope Optional scope for shared transitions.
+ * @param animatedVisibilityScope Optional scope for animated visibility transitions.
+ */
 @OptIn(
     ExperimentalSharedTransitionApi::class,
     ExperimentalGlideComposeApi::class
 )
 @Composable
-fun PlayerCard(
+private fun PlayerCard(
     modifier: Modifier = Modifier,
     player: PlayerUiModel,
     onClick: ((Int) -> Unit)?,
@@ -202,6 +222,12 @@ fun PlayerCard(
     }
 }
 
+/**
+ * A placeholder shown while player data is loading.
+ * Used as a fallback while paging is in progress.
+ *
+ * @param modifier Modifier to be applied to the placeholder.
+ */
 @Composable
 private fun PlayerCardPlaceholder(modifier: Modifier = Modifier) {
     Card(

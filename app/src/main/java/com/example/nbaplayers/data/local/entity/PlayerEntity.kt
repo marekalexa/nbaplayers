@@ -7,6 +7,18 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.nbaplayers.domain.model.Player
 
+/**
+ * Entity class representing a player in the local database.
+ * Maps to the 'players' table and includes a foreign key relationship to teams.
+ *
+ * @property id Unique identifier for the player
+ * @property firstName Player's first name
+ * @property lastName Player's last name
+ * @property position Player's position on the court
+ * @property height Player's height (optional)
+ * @property weight Player's weight (optional)
+ * @property teamId Foreign key reference to the player's team
+ */
 @Entity(
     tableName = "players",
     foreignKeys = [
@@ -29,6 +41,12 @@ data class PlayerEntity(
     val teamId: Int,
 )
 
+/**
+ * Converts a PlayerEntity to a domain Player model.
+ *
+ * @param team The associated team entity, if any
+ * @return Domain Player model
+ */
 fun PlayerEntity.toDomain(team: TeamEntity?) = Player(
     id = id,
     firstName = firstName,

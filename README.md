@@ -1,48 +1,62 @@
 # NBA Players App
 
-A modern Android application that displays NBA players using Jetpack Compose and follows MVVM architecture. The app demonstrates best practices in Android development including pagination, caching, and clean architecture.
+A modern Android application that displays NBA players using Jetpack Compose and follows MVVM
+architecture. The app demonstrates best practices in Android development including pagination,
+caching, and clean architecture.
 
 ## Features
 
-- 🏀 Display NBA players in a grid layout
-- 📱 Modern UI built with Jetpack Compose
-- 🔄 Efficient pagination with Paging 3
-- 💾 Local caching with Room database
-- 🌐 Remote data fetching with Retrofit
-- 🎨 Material 3 design system
-- 🔍 Pull-to-refresh functionality
-- 🖼️ Image loading with Glide
-- 🧪 Comprehensive unit tests
+- Display NBA players in a responsive grid layout
+- Built entirely with Jetpack Compose and Material 3
+- Endless scrolling with Paging 3 and pull-to-refresh
+- Shared element transitions between screens
+- Offline-first support with Room database caching
+- Remote NBA data from the Balldontlie API
+- ️Headshots and team logos with Glide Compose
+- Thorough unit testing across layers
+- Clean, modular MVVM architecture using Clean Architecture principles
+- Note: All images in this app are AI-generated and free to use. No real NBA assets are included.
 
 ## Tech Stack
 
-- **UI Layer**
-  - Jetpack Compose
-  - Material 3
-  - Compose Navigation
-  - Glide for image loading
+### UI
 
-- **Architecture**
-  - MVVM Architecture
-  - Clean Architecture principles
-  - Repository pattern
-  - Use cases
+- Jetpack Compose
+- Material 3 Design System
+- Shared element transitions (Compose Animation)
+- Compose Navigation
+- Glide Compose
 
-- **Data Layer**
-  - Room Database for local caching
-  - Retrofit for network calls
-  - Paging 3 for efficient data loading
-  - Kotlinx Serialization
+### Architecture
 
-- **Dependency Injection**
-  - Hilt
+- MVVM
+- Clean Architecture
+- Repository pattern
+- Use cases
 
-- **Testing**
-  - JUnit
-  - Mockk
-  - Turbine for Flow testing
-  - Robolectric
-  - Room testing utilities
+### Data
+
+- Retrofit
+- Paging 3
+- Room
+- Kotlinx Serialization
+
+### Dependency Injection
+
+- Dagger Hilt
+
+### Testing
+
+- JUnit 5
+- Mockk
+- Turbine
+- Robolectric
+- Room Testing Utilities
+
+### Navigation
+
+- Type-safe navigation with Compose Navigation
+- SharedTransitionLayout for animated transitions between screens
 
 ## Project Structure
 
@@ -77,16 +91,17 @@ The app uses the [balldontlie API](https://www.balldontlie.io/) for NBA data. Yo
 
 1. Get an API key from balldontlie
 2. Add it to your `local.properties` file:
+
 ```properties
 BALLDONTLIE_API_KEY=your_api_key_here
 ```
 
 ## Testing
 
-The project includes comprehensive unit tests. To run the tests:
+The project includes unit tests. To run the tests:
 
 ```bash
-./gradlew test
+./gradlew testReleaseUnitTest
 ```
 
 ## License

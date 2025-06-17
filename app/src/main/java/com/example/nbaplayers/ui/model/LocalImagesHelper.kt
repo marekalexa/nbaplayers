@@ -4,7 +4,11 @@ import androidx.annotation.DrawableRes
 import com.example.nbaplayers.R
 
 /**
- * Select a headshot picture for demonstration purposes
+ * Returns a demo player headshot resource ID based on the given player ID.
+ * Used to visually differentiate mock or sample player data.
+ *
+ * @param id The player ID.
+ * @return A drawable resource ID representing the headshot.
  */
 @DrawableRes
 fun getPlayerHeadshot(id: Int): Int {
@@ -20,7 +24,11 @@ fun getPlayerHeadshot(id: Int): Int {
 }
 
 /**
- * Select a team logo for demonstration purposes
+ * Returns a demo team logo resource ID based on the given team ID.
+ * Used to visually differentiate mock or sample team data.
+ *
+ * @param id The team ID.
+ * @return A drawable resource ID representing the team logo.
  */
 @DrawableRes
 fun getTeamLogo(id: Int): Int {

@@ -11,6 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+/**
+ * A back arrow icon button, typically used for navigating up in the app.
+ *
+ * @param modifier Modifier to be applied to the button.
+ * @param onBack Callback invoked when the button is clicked.
+ */
 @Composable
 fun BackArrow(modifier: Modifier = Modifier, onBack: () -> Unit) {
     IconButton(

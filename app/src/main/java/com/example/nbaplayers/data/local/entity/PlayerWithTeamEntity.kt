@@ -4,9 +4,12 @@ import androidx.room.Embedded
 import androidx.room.Relation
 
 /**
- * One-to-one relation wrapper returned by Room.
- * - `@Embedded` copies all columns of PlayerEntity.
- * - `@Relation` fetches the matching TeamEntity.
+ * Entity class representing a player with their associated team information.
+ * Uses Room's @Embedded and @Relation annotations to create a one-to-one relationship
+ * between a player and their team.
+ *
+ * @property player The player entity
+ * @property team The associated team entity
  */
 data class PlayerWithTeamEntity(
     @Embedded

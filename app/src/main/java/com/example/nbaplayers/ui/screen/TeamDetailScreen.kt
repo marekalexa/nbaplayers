@@ -35,6 +35,14 @@ import com.example.nbaplayers.ui.component.PlayersGridList
 import com.example.nbaplayers.ui.model.TeamDetailUiModel
 import com.example.nbaplayers.ui.viewmodel.TeamDetailViewModel
 
+/**
+ * Screen showing detailed information about a selected NBA team.
+ *
+ * Includes team details and a paginated list of its players.
+ *
+ * @param onBack Called when the user taps the back arrow.
+ * @param viewModel Injected ViewModel for team and player data.
+ */
 @OptIn(
     ExperimentalMaterial3Api::class,
     ExperimentalSharedTransitionApi::class
@@ -71,6 +79,13 @@ fun TeamDetailScreen(
     }
 }
 
+/**
+ * Displays the team information in a card layout.
+ *
+ * Shows logo, name, city, conference, and division.
+ *
+ * @param team The team to display.
+ */
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 private fun TeamHeader(team: TeamDetailUiModel) {

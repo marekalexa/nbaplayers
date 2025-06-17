@@ -13,6 +13,13 @@ import com.example.nbaplayers.data.remote.BalldontlieApi
 import com.example.nbaplayers.data.remote.dto.toLocal
 import kotlinx.coroutines.delay
 
+/**
+ * RemoteMediator implementation for handling pagination of player data.
+ * Manages the loading of player data from the remote API and caching in the local database.
+ *
+ * @property api Remote API for fetching player data
+ * @property db Local database for caching player data
+ */
 @OptIn(ExperimentalPagingApi::class)
 class PlayersRemoteMediator(
     private val api: BalldontlieApi,
@@ -21,6 +28,14 @@ class PlayersRemoteMediator(
 
     override suspend fun initialize(): InitializeAction = InitializeAction.LAUNCH_INITIAL_REFRESH
 
+    /**
+     * Loads data from the remote source and updates the local database.
+     * Handles initial load, refresh, and append operations.
+     *
+     * @param loadType The type of load operation (REFRESH, PREPEND, or APPEND)
+     * @param state The current state of the paging data
+     * @return MediatorResult indicating the success or failure of the load operation
+     */
     override suspend fun load(
         loadType: LoadType,
         state: PagingState<Int, PlayerWithTeam>
@@ -74,8 +89,10 @@ class PlayersRemoteMediator(
     }
 
     /**
-     * RemoteKey for the last item that was *already fetched* from the server.
-     * Works even when the user is still at the top of the list.
+     * Retrieves the remote key for the last item in the current state.
+     *
+     * @param state The current state of the paging data
+     * @return The remote key for the last item, or null if not found
      */
     private suspend fun getRemoteKeyForLastItem(
         state: PagingState<Int, PlayerWithTeam>
@@ -84,6 +101,6 @@ class PlayersRemoteMediator(
         val lastPage = state.pages.lastOrNull { it.data.isNotEmpty() }
         // The very last item in that page
         val lastItem = lastPage?.data?.lastOrNull()
-        return lastItem?.let { db.playerRemoteKeysDao().remoteKeyByPlayerId(it.player.id) }
+        return lastItem?.let { db.playerRemoteKeysDao().getRemoteKeyForPlayer(it.player.id) }
     }
 }
